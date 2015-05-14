@@ -1,0 +1,850 @@
+treatment "windfall_citizen_right4.ztt"{
+	background{
+		table globals{
+		}
+		table subjects{
+		}
+		table summary{
+		}
+		table contracts{
+		}
+		table session{
+		}
+		table logfile{
+		}
+		numsubjects = 4;
+		numgroups = 1;
+		numpracticeperiods = 0;
+		numactualperiods = 1;
+		exchangerate = 1;
+		startendowment = 0;
+		showupfee = 7;
+		noAutoscope = FALSE;
+		v2IntegerVars = TRUE;
+		v2BooleanVars = TRUE;
+		firstBoxesOnTop = FALSE;
+		showupfeeawaytext = "Sie haben Verlust gemacht. Wollen Sie das Startgeld einsetzen, um diesen Verlust zu decken?";
+		showupfeeawayyestext = "Ja";
+		showupfeeawaynotext = "Nein";
+		moneyawaytext = "Sie haben Verlust gemacht. Wollen Sie weiterfahren?";
+		moneyawayyestext = "Ja";
+		moneyawaynotext = "Nein";
+		bancruptwaittext = "Bitte warten Sie bis Ihr Computer wieder freigegeben wird.";
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			headerbox "Header"{
+				hasframe = TRUE;
+				height = 10%;
+				top = 0p;
+				cuttop = TRUE;
+				showPeriods = TRUE;
+				showNumPeriods = TRUE;
+				periodtext = "Period";
+				periodoftext = "of";
+				practiceperiodprefix = "Probe ";
+				showtime = TRUE;
+				timestr = "Time remaining [sec]:";
+				pleasedecidetext = "Please make a decision!";
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			standardbox "Text"{
+				hasframe = TRUE;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "Please wait, the experiment will proceed shortly.";
+				}
+			}
+		}
+	}
+	stage "Assign Roles"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = always;
+		timeout = 0;
+		program{
+			table = subjects;
+			do{
+				if ( Subject <= 2 ) {
+				  PlayerNum = 1;
+				}
+				else{
+				  PlayerNum = 2;
+				}
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Windfall Activation (Citizen)"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 2,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox "Windfall Activation"{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					text = "You are the citizen in this game.";
+					x = 0;
+					y = 20;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+				plottext ""{
+					text = "Please activate the windfall generator by pressing the button below.";
+					x = 0;
+					y = 10;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = FALSE;
+				width = 20%;
+				height = 20%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				button "       WINDFALL       "{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = TRUE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = TRUE;
+					buttoncolor = 5921535;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Warn leaders"{
+		startwaitforall = FALSE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = always;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 1,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox "Wait"{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					text = "You are the leader in this game.";
+					x = 0;
+					y = 20;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+				plottext ""{
+					text = "Please wait while the citizen activates the windfall generator.";
+					x = 0;
+					y = 10;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Windfall Revenue"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				//Windfall generator.
+				odd  = ( 100 - 50 ) * random() + 50;
+				windfall = round(odd, 2);
+			}
+		}
+		program{
+			table = subjects;
+			do{
+				windfall = find ( same ( Group ) & PlayerNum == 2, windfall );
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox "Windfall Revenue"{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					displaycondition = PlayerNum == 2;
+					text = "<> Your windfall income is <windfall | 1>.";
+					x = 0;
+					y = 10;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+				plottext ""{
+					displaycondition = PlayerNum == 1;
+					text = "<> The citizen's windfall income is <windfall | 1>.";
+					x = 0;
+					y = 10;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = FALSE;
+				width = 10%;
+				height = 10%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				button "Continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = TRUE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = TRUE;
+					buttoncolor = 13158600;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "After Tax Income"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				//Apply windfall income tax of 50%
+				tax = 0.5 * round( windfall , 1 )  ;
+				aftertax = 0.5 * round( windfall , 1 ) ;  //aftertax = windfall - taxes;
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox ""{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					displaycondition = PlayerNum == 2;
+					text = "A 50% tax was applied to your  windfall income. Below is a summary of your tax return.";
+					x = 0;
+					y = 30;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+				plottext ""{
+					displaycondition = PlayerNum == 1;
+					text = "A 50% tax was applied to the citizen's windfall income. Below is a summary of the citizen's tax return.";
+					x = 0;
+					y = 30;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = TRUE;
+				width = 20%;
+				height = 20%;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "{\\rtf \\fs18 \\b Tax Return}";
+				}
+				item{
+				}
+				item{
+					label = "{\\rtf \\fs18 Windfal income}";
+					variable = windfall;
+					format = "1";
+					input = FALSE;
+				}
+				item{
+					label = "{\\rtf \\fs18  Tax}";
+					variable = tax;
+					format = "1";
+					input = FALSE;
+				}
+				item{
+					label = "{\\rtf \\fs18 After tax income}";
+					variable = aftertax;
+					format = "1";
+					input = FALSE;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = FALSE;
+				width = 10%;
+				height = 10%;
+				right = 10%;
+				bottom = 10%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				button "Continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = TRUE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = TRUE;
+					buttoncolor = 13158600;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Public Revenues"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				//Public revenues are equivalent to double the tax revenues
+				groupfund = 2 * tax;
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox "Group Fund"{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					text = "Public revenues consist of an automatic doubling of tax revenues.";
+					x = 0;
+					y = 10;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Public Revenues"{
+				hasframe = TRUE;
+				width = 15%;
+				height = 5%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "{\\rtf \\fs18  \\b Public Revenues:}";
+					variable = groupfund;
+					format = "1";
+					input = FALSE;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = FALSE;
+				width = 10%;
+				height = 10%;
+				right = 10%;
+				bottom = 10%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				button "Continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = TRUE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = TRUE;
+					buttoncolor = 13158600;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Division of Pie"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 15;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 1,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox ""{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					text = "Below you will find the amount of public revenues. Please choose how you wish to divide this amount between yourself and the citizen.";
+					x = 0;
+					y = 20;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = TRUE;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "{\\rtf \\fs18 \\b Division of Public Revenues}";
+				}
+				item{
+					label = "The total amount to distribute";
+					variable = groupfund;
+					format = "1";
+					input = FALSE;
+				}
+				item{
+					label = "Your offer (amount citizen receives):";
+					variable = offer;
+					format = "1";
+					input = TRUE;
+					showdefault = FALSE;
+					emptyallowed = FALSE;
+					min = 0;
+					max = groupfund;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = FALSE;
+				width = 10%;
+				height = 10%;
+				right = 10%;
+				bottom = 10%;
+				buttonposition = MIDDLEMIDDLE;
+				buttonsequence = HORIZONTAL;
+				button "Continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = TRUE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = TRUE;
+					buttoncolor = 13158600;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Compute and Store Shares"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = always;
+		timeout = 0;
+		program{
+			table = subjects;
+			do{
+				//Compute citizen's share
+				citizenshare = find ( same ( Group ) & PlayerNum == 1 , offer ) / groupfund;
+				leadershare = ( find ( same ( Group )  & PlayerNum == 1 , groupfund )  - find ( same ( Group ) & PlayerNum == 1 , offer ) ) / groupfund;
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Penalty"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = never;
+		timeout = 15;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 2,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			plotbox ""{
+				hasframe = TRUE;
+				width = 100%;
+				height = 100%;
+				bgcolor = rgb(1.00,1.00,1.00);
+				maintainaspectratio = FALSE;
+				xaxistype = LINEAR;
+				yaxistype = LINEAR;
+				xleft = -100;
+				xright = 100;
+				ybottom = -100;
+				ytop = 100;
+				plottext ""{
+					text = "The leader has chosen the following division of public revenues:";
+					x = 0;
+					y = 80;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+				plottext ""{
+					text = "Do you want to impose a penalty of 20% (of the leader's share) on the leader at a cost of 5% (of your total payoff) to yourself?";
+					x = 0;
+					y = 0;
+					horizontalalignment = CENTER;
+					verticalalignment = CENTER;
+					textcolor = rgb(0,0,0);
+					font = MS Sans Serif;
+					fontsize = 18;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = TRUE;
+				width = 20%;
+				height = 20%;
+				left = 40%;
+				right = 40%;
+				top = 20%;
+				bottom = 60%;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "{\\rtf \\fs18 \\b Division of Public Revenues \\b0 (ignore rounding errors)}";
+				}
+				item{
+					label = "Your share (%):";
+					variable = citizenshare;
+					format = "0.01";
+					input = FALSE;
+				}
+				item{
+					label = "Leader's share (%):";
+					variable = leadershare;
+					format = "0.01";
+					input = FALSE;
+				}
+			}
+			standardbox "Standard"{
+				hasframe = TRUE;
+				left = 40%;
+				right = 40%;
+				top = 60%;
+				bottom = 20%;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					variable = citizenDecision;
+					format = "!radio: \r\n1= \"Yes, I want to impose a penalty\";\r\n0= \"No, I do not want to impose a penalty\";";
+					input = TRUE;
+					showdefault = FALSE;
+					emptyallowed = FALSE;
+					min = 0;
+					max = 1;
+				}
+				button "Continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = FALSE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = FALSE;
+					buttoncolor = 0;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Profit Calculation"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = always;
+		timeout = 0;
+		program{
+			table = subjects;
+			do{
+				citizenDecision = find ( same ( Group ) & PlayerNum == 2 , citizenDecision );
+			}
+		}
+		program{
+			table = subjects;
+			do{
+				if ( PlayerNum == 1 ){
+				  Profit = if ( citizenDecision == 1 ,  (leadershare * 0.8) * groupfund , leadershare * groupfund );
+				}
+				else{
+				 Profit = if (citizenDecision == 1 , ( aftertax + (citizenshare * 0.95) * groupfund ) , ( aftertax + citizenshare * groupfund ) );
+				}
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Profit leader"{
+		startwaitforall = TRUE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = ifnoinput;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 1,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			standardbox "Standard"{
+				hasframe = TRUE;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+					label = "Your income in this period";
+					variable = Profit;
+					format = "1";
+					input = FALSE;
+				}
+				button "continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = FALSE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = FALSE;
+					buttoncolor = 0;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	stage "Profit citizen"{
+		startwaitforall = FALSE;
+		singleentry = FALSE;
+		singleentrycontinuation = FALSE;
+		timeouttype = ifnoinput;
+		timeout = 5;
+		program{
+			table = subjects;
+			do{
+				Participate = if ( PlayerNum == 2,1,0);
+			}
+		}
+		screen action{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+			standardbox "Standard"{
+				hasframe = TRUE;
+				buttonposition = BOTTOMRIGHT;
+				buttonsequence = HORIZONTAL;
+				item{
+				}
+				item{
+					label = "Your income in this period";
+					variable = Profit;
+					format = "1";
+					input = FALSE;
+				}
+				button "continue"{
+					clearinputafterok = FALSE;
+					norecordmadeorselected = FALSE;
+					terminatestage = FALSE;
+					donotterminatestage = FALSE;
+					specialbuttoncolor = FALSE;
+					buttoncolor = 0;
+				}
+			}
+		}
+		screen wait{
+			usesbg = TRUE;
+			withalertscreen = FALSE;
+			noalertscreen = FALSE;
+		}
+	}
+	roles{
+		role "S 1"{
+		}
+		role "S 2"{
+		}
+		role "S 3"{
+		}
+		role "S 4"{
+		}
+	}
+	period "1"{
+		subject 1{
+			group = 1;
+		}
+		subject 2{
+			group = 1;
+		}
+		subject 3{
+			group = 1;
+		}
+		subject 4{
+			group = 1;
+		}
+	}
+}
